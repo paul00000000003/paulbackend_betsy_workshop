@@ -17,8 +17,16 @@ def list_user_products(user_id):
 
 
 def list_products_per_tag(tag_id):
-    return Product.select().where(Product.color == tag_id or Product.product_category == tag_id or Product.appliance_place == tag_id).dicts()
-    # hmmmm : was dit wel de bedoeling ? Dus een tag_id is uniek voor alle soorten tags per produkt ?
+    products = Product.select()
+    representative_products = []
+    for product in products:
+        product_chosen = "N"
+        for tag in product.tags:
+            if tag.name == tag_id:
+                product_chosen = "Y"
+        if product_chosen == "Y":
+            representative_products.append(product.product_name)
+    return representative_products
 
 
 def add_product_to_catalog(user_id, product_name):
@@ -57,8 +65,8 @@ for regel in query:
     print(regel)
 for product in chosen_products:
     print("geselecteerd produkt : "+product.product_name)
-query = list_products_per_tag("blue")
-print("en nu de blauwe")
+query = list_products_per_tag("Domestic")
+print("en nu de producten met tag Domestic")
 for regel in query:
     print(regel)
 add_product_to_catalog(1, "koltrui")
@@ -66,8 +74,8 @@ update_stock("koltrui", 25)
 purchase_product("koltrui", 1, 1, 90.1234)
 
 # I kidded myself trying to remove a record from the table Product whereas it was still present in other tables. Be aware this is not possible due
-# to primary_key foreign-key contraints. 
+# to primary_key foreign-key contraints.
 remove_product("appels")
-# Be aware prices are rounded automatically due to the definition of the price format both in the product and transaction data table. 
+# Be aware prices are rounded automatically due to the definition of the price format both in the product and transaction data table.
 purchase_product("oranges", 1, 1, 0.8912)
 """

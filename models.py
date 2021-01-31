@@ -25,14 +25,18 @@ class User(BaseModel):
 # I actually think for one seller the product_name should be unique
 
 
+class Tags(BaseModel):
+    name = CharField()
+    # Je zou hier ook met een id kunnen werken. Dan worden de condities net wat
+    # anders maar het scheelt niet veel.
+
+
 class Product(BaseModel):
     product_name = CharField(unique=True, primary_key=True)
     description = CharField()
     price_per_unit = DecimalField(8, 2, True)
     number_in_stock = IntegerField(constraints=[Check('number_in_stock>=0')])
-    color = CharField()   # The term tag is somewhat confusing. Did you mean field ?
-    product_category = CharField()
-    appliance_place = CharField()
+    tags = ManyToManyField(Tags)
 
 
 class User_products(BaseModel):
@@ -54,11 +58,14 @@ class Catalog(BaseModel):
     product_name = ForeignKeyField(Product, backref="Product")
 
 
+ProductTag = Product.tags.get_through_model()
+
+
 def create_tables():
     with database:
         #        database.create_tables([TransactionData, Product, User_products, User])
         database.create_tables(
-            [User, User_products, Product, TransactionData, Catalog])
+            [User, User_products, Product, TransactionData, Catalog, ProductTag, Tags])
 
 
 if __name__ == "__main__":
