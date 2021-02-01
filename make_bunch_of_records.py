@@ -19,6 +19,15 @@ def make_bunch_of_records():
     een record in Catalog,TransactionData,User_products kunt zetten. Dit gaat gepaard
     met het definieren van een primary key in Product en User en foreign_keys in Catalog,TransactionData en User_products
     """
+    if User.select().where(User.name == "Paul van Mierlo"):
+        None
+    else:
+        User.create(name="Paul van Mierlo",
+                    street="Roemer Visscherstraat 35", town="Leiden")
+    if Catalog.select().where(Catalog.catalog_id == 1):
+        None
+    else:
+        Catalog.create(catalog_id=1, user_id=1)
     if Tags.select().where(Tags.name == "Domestic"):
         None
     else:
@@ -50,7 +59,8 @@ def make_bunch_of_records():
         Product.create(product_name="koltrui",
                        description="trui met hoge kol",
                        price_per_unit=89.7634,
-                       number_in_stock=20, tags=[])
+                       number_in_stock=20, tags=[],
+                       catalog_id=1)
     koltrui = Product.get(Product.product_name == "koltrui")
     add_tag(koltrui, "Domestic")
     add_tag(koltrui, "WardRobe")
@@ -61,14 +71,16 @@ def make_bunch_of_records():
                        description="trui met revers",
                        price_per_unit=0.3412,
                        number_in_stock=18,
-                       tags=[])
+                       tags=[],
+                       catalog_id=1)
     if Product.select().where(Product.product_name == "appels"):
         None
     else:
         Product.create(product_name="appels",
                        description="lekkere Spaanse appels",
                        price_per_unit=2.4564,
-                       number_in_stock=18)
+                       number_in_stock=18, tags=[],
+                       catalog_id=1)
     if User.select().where(User.name == "Paul van Mierlo"):
         None
     else:
@@ -109,7 +121,7 @@ def make_bunch_of_records():
         None
     else:
         Product.create(product_name="oranges", description="Very good tasting Marocan oranges", price_per_unit=0.987,
-                       color="orange", product_category="food", appliance_place="random", number_in_stock=250)
+                       number_in_stock=250, tags=[], catalog_id=1)
 
     oranges_id = Product.get(Product.product_name == "oranges")
 

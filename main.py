@@ -31,8 +31,22 @@ def list_products_per_tag(tag_id):
 
 
 def add_product_to_catalog(user_id, product_id):
-    # a user catalog ? WTF is a user catalog ?
-    Catalog.create(user_id=user_id, product_id=product_id)
+    #   Een produkt dat al in de database aanwezig was, was al aan een catalogus
+    #   gekoppeld. Ik begreep dus niet hoe je op basis van een bestaand produkt een record aan de catalogus
+    #   toe gaat voegen. Er is door Donatas een database opzet gecreeerd die ik in twijfel trek.
+    if Product.select().where(Product.product_id == product_id):
+        if Catalog.select().where(Catalog.user_id == user_id):
+            catalog = Catalog.get(Catalog.user_id == user_id)
+            id = catalog.catalog_id
+        else:
+            id = 1
+            Catalog.create(catalog_id=1, user_id=user_id)
+        Catalog.create(user_id=user_id, product_id=product_id)
+        product = Product.get(Product.product_id == product_id)
+        product.catalog_id = id
+        product.save()
+    else:
+        print("This function doesn't work if the product doesn't exist yet. Of course it \n would be possible to defined the product first and \n then add it to the catalog but this involves more fields")
 
 
 def update_stock(product_name, new_quantity):

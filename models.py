@@ -32,6 +32,11 @@ class Tags(BaseModel):
     # anders maar het scheelt niet veel.
 
 
+class Catalog(BaseModel):
+    catalog_id = IntegerField(primary_key=True)
+    user_id = ForeignKeyField(User, backref="User")
+
+
 class Product(BaseModel):
     product_id = AutoField(unique=True, primary_key=True)
     product_name = CharField()
@@ -39,6 +44,7 @@ class Product(BaseModel):
     price_per_unit = DecimalField(8, 2, True)
     number_in_stock = IntegerField(constraints=[Check('number_in_stock>=0')])
     tags = ManyToManyField(Tags)
+    catalog_id = ForeignKeyField(Catalog)
 
 
 class User_products(BaseModel):
@@ -53,11 +59,6 @@ class TransactionData(BaseModel):
     number = IntegerField(constraints=[Check('number>0')])
     sell_date = DateField()
     sell_price = DecimalField(8, 2, True)
-
-
-class Catalog(BaseModel):
-    user_id = ForeignKeyField(User, backref="User")
-    product_id = ForeignKeyField(Product, backref="Product")
 
 
 ProductTag = Product.tags.get_through_model()
