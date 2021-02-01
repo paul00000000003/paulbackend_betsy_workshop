@@ -26,13 +26,15 @@ class User(BaseModel):
 
 
 class Tags(BaseModel):
+    tag_id = AutoField(unique=True, primary_key=True)
     name = CharField()
     # Je zou hier ook met een id kunnen werken. Dan worden de condities net wat
     # anders maar het scheelt niet veel.
 
 
 class Product(BaseModel):
-    product_name = CharField(unique=True, primary_key=True)
+    product_id = AutoField(unique=True, primary_key=True)
+    product_name = CharField()
     description = CharField()
     price_per_unit = DecimalField(8, 2, True)
     number_in_stock = IntegerField(constraints=[Check('number_in_stock>=0')])
@@ -41,13 +43,13 @@ class Product(BaseModel):
 
 class User_products(BaseModel):
     user_id = ForeignKeyField(User, backref="User")
-    product_name = ForeignKeyField(Product, backref="Product")
+    product_id = ForeignKeyField(Product, backref="Product")
     number = IntegerField(constraints=[Check('number >=0')])
 
 
 class TransactionData(BaseModel):
     user_id = ForeignKeyField(User, backref="User")
-    product_name = ForeignKeyField(Product, backref="Product")
+    product_id = ForeignKeyField(Product, backref="Product")
     number = IntegerField(constraints=[Check('number>0')])
     sell_date = DateField()
     sell_price = DecimalField(8, 2, True)
@@ -55,7 +57,7 @@ class TransactionData(BaseModel):
 
 class Catalog(BaseModel):
     user_id = ForeignKeyField(User, backref="User")
-    product_name = ForeignKeyField(Product, backref="Product")
+    product_id = ForeignKeyField(Product, backref="Product")
 
 
 ProductTag = Product.tags.get_through_model()

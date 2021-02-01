@@ -2,7 +2,7 @@ __winc_id__ = "d7b474e9b3a54d23bca54879a4f1855b"
 __human_name__ = "Betsy Webshop"
 
 from peewee import *
-#from models import BaseModel,Product
+# from models import BaseModel,Product
 from datetime import datetime
 from models import *
 from make_bunch_of_records import *
@@ -19,19 +19,20 @@ def list_user_products(user_id):
 def list_products_per_tag(tag_id):
     products = Product.select()
     representative_products = []
+
     for product in products:
         product_chosen = "N"
         for tag in product.tags:
-            if tag.name == tag_id:
+            if tag.tag_id == tag_id:
                 product_chosen = "Y"
         if product_chosen == "Y":
             representative_products.append(product.product_name)
     return representative_products
 
 
-def add_product_to_catalog(user_id, product_name):
+def add_product_to_catalog(user_id, product_id):
     # a user catalog ? WTF is a user catalog ?
-    Catalog.create(user_id=user_id, product_name=product_name)
+    Catalog.create(user_id=user_id, product_id=product_id)
 
 
 def update_stock(product_name, new_quantity):
@@ -41,8 +42,8 @@ def update_stock(product_name, new_quantity):
 
 
 # error in assignment : price misses in transaction model
-def purchase_product(product_name, buyer_id, quantity, price):
-    TransactionData.create(user_id=buyer_id, product_name=product_name,
+def purchase_product(product_id, buyer_id, quantity, price):
+    TransactionData.create(user_id=buyer_id, product_id=product_id,
                            number=quantity, sell_date=datetime.now(), sell_price=price)
 
 
@@ -59,23 +60,25 @@ prices as well as contraints on Primary and Foreign keys. Other than that a few 
 
 make_bunch_of_records()
 chosen_products = search("Trui")
+for product in chosen_products:
+    print("product "+product.product_name)
+
 query = list_user_products(1)
 
 for regel in query:
-    print(regel)
-for product in chosen_products:
-    print("geselecteerd produkt : "+product.product_name)
-query = list_products_per_tag("Domestic")
-print("en nu de producten met tag Domestic")
+    print("list_user_products "+regel.__repr__())
+
+query = list_products_per_tag(1)
+print("en nu de producten met tag name Domestic")
 for regel in query:
     print(regel)
-add_product_to_catalog(1, "koltrui")
-update_stock("koltrui", 25)
-purchase_product("koltrui", 1, 1, 90.1234)
 
-# I kidded myself trying to remove a record from the table Product whereas it was still present in other tables. Be aware this is not possible due
-# to primary_key foreign-key contraints.
+add_product_to_catalog(1, 1)
+
+update_stock("koltrui", 25)
+
+purchase_product(1, 1, 1, 90.1234)
+
+# Be aware of enforced primary-key, foreign-key relationships when removing a product
 remove_product("appels")
-# Be aware prices are rounded automatically due to the definition of the price format both in the product and transaction data table.
-purchase_product("oranges", 1, 1, 0.8912)
 """
