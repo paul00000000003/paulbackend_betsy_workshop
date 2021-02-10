@@ -21,6 +21,11 @@ def list_user_products(user_id):
 def list_products_per_tag(tag_id):
     #   Since this is a manytomany relationship i don't think a join is possible
     #   That's why I think this is the easiest way to program this
+    ProductTag.select(Product.product_name, Tag.name).join(Product).switch(
+        ProductTag).join(Tag)
+
+
+"""
     products = Product.select()
     representative_products = []
 
@@ -32,6 +37,7 @@ def list_products_per_tag(tag_id):
         if product_chosen == "Y":
             representative_products.append(product.product_name)
     return representative_products
+"""
 
 
 def update_product_in_user_catalog(user_id, product_name, new_quantity):
@@ -84,7 +90,7 @@ created if they dont't yet exist.
 
 I left the statements underneath which I used solely for testing purposes. Be aware the datamodel is based on the DecimalFormat on
 prices as well as contraints on Primary and Foreign keys. Other than that a few fields have other specific contraints such a positive number
-
+"""
 make_bunch_of_records()
 chosen_products = search("Trui")
 for product in chosen_products:
@@ -97,12 +103,10 @@ for regel in query.dicts():
 
 query = list_products_per_tag(1)
 print("en nu de producten met tag name Domestic")
-for regel in query:
-    print(regel)
+print(query)
 
 update_product_in_user_catalog(1, "Trui", 25)
 
 purchase_product(1, 1, 1, 90.1234)
 
 remove_product("appels")
-"""

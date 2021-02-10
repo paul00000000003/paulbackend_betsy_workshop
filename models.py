@@ -45,6 +45,14 @@ class Product(BaseModel):
 """
 
 
+class Product(BaseModel):
+    product_id = AutoField(unique=True, primary_key=True)
+    product_name = CharField()
+    description = CharField()
+    price_per_unit = DecimalField(8, 2, True)
+    tags = ManyToManyField(Tag)
+
+
 class User_product(BaseModel):
     user_id = ForeignKeyField(User)
     product_id = ForeignKeyField(Product)
