@@ -19,8 +19,8 @@ def list_user_products(user_id):
 
 
 def list_products_per_tag(tag_id):
-    #   Since this is a manytomany relationship i don't think a join is possible
-    #   That's why I think this is the easiest way to program this
+    #  In case of a ManyToMany relationship the fields of the table underneath are foreignkeyfields.
+    #  This was not so obvious to me.
     return ProductTag.select(Product.product_name, Tag.name).join(Product).switch(
         ProductTag).join(Tag)
 
