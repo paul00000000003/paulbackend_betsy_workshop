@@ -13,11 +13,34 @@ def add_tag(product, tag_name):
 
 
 def make_bunch_of_records():
-    if User.select().where(User.name == "Paul van Mierlo"):
+    if User.select().where(User.firstName == "Paul" and User.lastName == "van Mierlo"):
         None
     else:
-        User.create(name="Paul van Mierlo",
+        User.create(firstName="Paul",
+                    lastName="van Mierlo",
+                    street="Roemer Visscherstraat 35",
+                    town="Leiden")
+    if User.select().where(User.firstName == "Mariza" and
+                           User.lastName == "Dacoron"):
+        None
+    else:
+        User.create(firstName="Mariza",
+                    lastName="Dacoron",
                     street="Roemer Visscherstraat 35", town="Leiden")
+
+    if User.select().where(User.firstName == "Pete" and User.lastName == "Petterson"):
+        None
+    else:
+        User.create(firstName="Pete",
+                    lastName="Petterson",
+                    street="43 Bloomingdale lane", town="Bloomingdale")
+
+    if User.select().where(User.firstName == "Jake" and User.lastName == "Nicholson"):
+        None
+    else:
+        User.create(firstName="Jack",
+                    lastName="Nicholson",
+                    street="43 Park Avenue", town="Bloomsdale")
     if Tag.select().where(Tag.name == "Domestic"):
         None
     else:
@@ -70,40 +93,18 @@ def make_bunch_of_records():
                        price_per_unit=2.4564,
                        tags=[],
                        catalog_id=1)
-    if User.select().where(User.name == "Paul van Mierlo"):
-        None
-    else:
-        User.create(name="Paul van Mierlo",
-                    street="Roemer Visscherstraat 35", town="Leiden")
-    if User.select().where(User.name == "Mariza Dacoron"):
-        None
-    else:
-        User.create(name="Mariza Dacoron",
-                    street="Roemer Visscherstraat 35", town="Leiden")
 
-    if User.select().where(User.name == "Pete Petterson"):
+    if UserProduct.select().where(UserProduct.user_id == 1):
         None
     else:
-        User.create(name="Pete Petterson",
-                    street="43 Bloomingdale lane", town="Bloomingdale")
+        UserProduct.create(user_id=1, product_id=1, number=2)
+        UserProduct.create(user_id=1, product_id=2, number=2)
 
-    if User.select().where(User.name == "Jake Nicholson"):
+    if UserProduct.select().where(UserProduct.user_id == 2):
         None
     else:
-        User.create(name="Jack Nicholson",
-                    street="43 Park Avenue", town="Bloomsdale")
-
-    if User_product.select().where(User_product.user_id == 1):
-        None
-    else:
-        User_product.create(user_id=1, product_id=1, number=2)
-        User_product.create(user_id=1, product_id=2, number=2)
-
-    if User_product.select().where(User_product.user_id == 2):
-        None
-    else:
-        User_product.create(user_id=2, product_id=1, number=2)
-        User_product.create(
+        UserProduct.create(user_id=2, product_id=1, number=2)
+        UserProduct.create(
             user_id=2, product_id=2, number=3)
 
     if Product.select().where(Product.product_name == "oranges"):
@@ -114,7 +115,7 @@ def make_bunch_of_records():
 
     oranges_id = Product.get(Product.product_name == "oranges")
 
-    if User_product.select().where(User_product.user_id == 4 and User_product.product_id == oranges_id):
+    if UserProduct.select().where(UserProduct.user_id == 4 and UserProduct.product_id == oranges_id):
         None
     else:
-        User_product.create(user_id=4, product_id=oranges_id, number=10)
+        UserProduct.create(user_id=4, product_id=oranges_id, number=10)
